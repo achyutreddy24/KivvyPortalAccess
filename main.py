@@ -221,11 +221,11 @@ class CourseList(BoxLayout):
         fin = ''
         
         if 'YTD' in grades:
-            ytd = 'YTD: ' + grades['YTD'] + ' '
+            ytd = 'YTD: ' + grades['YTD']
         if 'MT' in grades:
             mt = 'MT: ' + grades['YTD'] + ' '
         if 'FIN' in grades:
-            fin = 'FIN: ' + grades['YTD']
+            fin = 'FIN: ' + grades['YTD'] + ' '
         
         result = {
             "text": course_name,
