@@ -1,5 +1,6 @@
 #:import la kivy.adapters.listadapter
 #:import lbl kivy.uix.label
+#:import ok main
 
 PortalRoot:
 
@@ -41,8 +42,32 @@ PortalRoot:
             height: "40dp"
             text: "Login"
             on_press: root.login()
+
+<CourseListItem>:
+    size_hint_y: None
+    height: "75dp"
+    canvas.before:
+        Color:
+            rgba: self.background
+        Rectangle:
+            pos: self.pos
+            size: self.size
+     
+    BoxLayout:
+        size_hint_x: 3
+        orientation: 'vertical'
+        Label:
+            text: root.text
+            font_size: "25dp"
+            size_hint_y: 0.7
+        Label:
+            text: root.grades
+            color: (0.5, 0.5, 0.5, 1.0)
+            font_size: "15dp"
+            size_hint_y: 0.3
+
 <CourseList>:
     list_view: list_view
     ListView:
         id: list_view
-        adapter: la.ListAdapter(data=[], cls=lbl.Label)
+        adapter: la.ListAdapter(data=[], cls=ok.CourseListItem, args_converter=root.grade_converter)

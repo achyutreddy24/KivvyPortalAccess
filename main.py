@@ -5,6 +5,7 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
+from kivy.properties import StringProperty
 
 
 import urllib2
@@ -100,7 +101,12 @@ class PortalAccess(object):
         table = soup.find("table", attrs={"class":"classGradesTbl"})
         
         grades = dict()
-        count = 0
+        count = 0       
+        if not table:
+            r = dict()
+            r['YTD'] = ''
+            return r
+            
         for x in table.findAll('td'):
             count = count + 1
             grade = x.find('a')
@@ -111,6 +117,9 @@ class PortalAccess(object):
                 other_grade = str(x.contents[-5])
                 other_grade_name = str(x.find('b').contents[-1])
                 grades[other_grade_name.strip()] = other_grade.strip()
+                
+        if 'YTD' not in grades:
+            grades['YTD'] = ''
         return grades
 
         
@@ -192,6 +201,11 @@ class AccountDetailsForm(AnchorLayout):
         
         app.root.show_course_list()
         
+class CourseListItem(BoxLayout):
+    text = StringProperty()
+    grades = StringProperty()
+    background = ObjectProperty()
+        
 class CourseList(BoxLayout):
     list_view = ObjectProperty()
  
@@ -199,6 +213,22 @@ class CourseList(BoxLayout):
         super(CourseList, self).__init__()
         self.app = Portal.get_running_app()
         self.list_view.adapter.data = sorted(self.app.pa.course_ids.keys())
+        
+    def grade_converter(self, index, course_name):
+        app = Portal.get_running_app()
+        ytd = app.get_grades(course_name)
+        
+        result = {
+            "text": course_name,
+            "grades": 'YTD: ' + ytd
+        }
+        
+        if index % 2:
+            result['background'] = (0, 0, 0, 1)
+        else:
+            result['background'] = (0.05, 0.05, 0.07, 1)
+     
+        return result
         
 class PortalRoot(BoxLayout):
     def show_course_list(self):
@@ -214,6 +244,10 @@ class Portal(App):
         self.pa.set_active_id(self.pa.student_ids['Achyut Reddy'])
         self.pa.refresh()
         print self.pa.course_ids
+        
+    def get_grades(self, course_name):
+        print course_name
+        return self.pa.get_course_grades(self.pa.active_id, self.pa.course_ids[course_name])['YTD']
         
         
 Portal().run()
