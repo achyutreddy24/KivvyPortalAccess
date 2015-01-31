@@ -46,18 +46,13 @@ PortalRoot:
 <CourseListItem>:
     size_hint_y: None
     height: "75dp"
-    canvas.before:
-        Color:
-            rgba: self.background
-        Rectangle:
-            pos: self.pos
-            size: self.size
-     
+    selected_color: (0.2, 0.1, 0.2, 1.0)   
+    on_release: app.root.show_mp_grades(self.course_name)  
     BoxLayout:
         size_hint_x: 3
         orientation: 'vertical'
         Label:
-            text: root.text
+            text: root.course_name
             font_size: "25dp"
             size_hint_y: 0.7
         Label:
@@ -71,3 +66,36 @@ PortalRoot:
     ListView:
         id: list_view
         adapter: la.ListAdapter(data=[], cls=ok.CourseListItem, args_converter=root.grade_converter)
+
+
+<MPGradeWindow>:
+    orientation: "vertical"
+    Label:
+        text: root.course_name
+        size_hint_y: None
+        height: "40dp"
+    BoxLayout:
+        size_hint_y: None
+        height: "50dp"
+
+        Label:
+            text: 'MP1: ' + root.MP1
+            size_hint_y: None
+            height: "25dp" 
+        Label:
+            text: 'MP2: ' + root.MP2
+            size_hint_y: None
+            height: "25dp" 
+        Label:
+            text: 'MP3: ' + root.MP3
+            size_hint_y: None
+            height: "25dp" 
+        Label:
+            text: 'MP4: ' + root.MP4
+            size_hint_y: None
+            height: "25dp"
+    Button:
+        size_hint_x: None
+        width: "70dp"
+        text: "Back"
+        on_release: app.root.show_course_list()

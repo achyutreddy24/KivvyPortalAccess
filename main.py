@@ -6,6 +6,7 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.properties import StringProperty
+from kivy.uix.listview import ListItemButton
 
 
 import urllib2
@@ -199,10 +200,16 @@ class AccountDetailsForm(AnchorLayout):
         
         app.root.show_course_list()
         
-class CourseListItem(BoxLayout):
-    text = StringProperty()
+class MPGradeWindow(BoxLayout):
+    course_name = StringProperty()
+    MP1 = StringProperty()
+    MP2 = StringProperty()
+    MP3 = StringProperty()
+    MP4 = StringProperty()
+        
+class CourseListItem(BoxLayout, ListItemButton):
+    course_name = StringProperty()
     grades = StringProperty()
-    background = ObjectProperty()
         
 class CourseList(BoxLayout):
     list_view = ObjectProperty()
@@ -228,14 +235,14 @@ class CourseList(BoxLayout):
             fin = 'FIN: ' + grades['YTD'] + ' '
         
         result = {
-            "text": course_name,
+            "course_name": course_name,
             "grades": mt + fin + ytd
         }
         
         if index % 2:
-            result['background'] = (0, 0, 0, 1)
+            result['background_color'] = (0, 0, 0, 1)
         else:
-            result['background'] = (0.05, 0.05, 0.07, 1)
+            result['background_color'] = (0.05, 0.05, 0.07, 1)
      
         return result
         
@@ -244,6 +251,33 @@ class PortalRoot(BoxLayout):
         self.clear_widgets()
         self.course_list = CourseList()
         self.add_widget(self.course_list)
+        
+    def show_mp_grades(self, course_name):
+        self.clear_widgets()
+        
+        app = Portal.get_running_app()
+        grades = app.get_grades(course_name)
+        
+        MP1='-'
+        MP2='-'
+        MP3='-'
+        MP4='-'
+        
+        if 'MP1' in grades:
+            MP1=grades['MP1']
+        if 'MP2' in grades:
+            MP2=grades['MP2']
+        if 'MP3' in grades:
+            MP3=grades['MP3']
+        if 'MP4' in grades:
+            MP4=grades['MP4']
+        
+        grade_window = MPGradeWindow(course_name=course_name, 
+                                     MP1=MP1,
+                                     MP2=MP2,
+                                     MP3=MP3,
+                                     MP4=MP4)
+        self.add_widget(grade_window)
 
 class Portal(App):
         
