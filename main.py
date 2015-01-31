@@ -118,8 +118,6 @@ class PortalAccess(object):
                 other_grade_name = str(x.find('b').contents[-1])
                 grades[other_grade_name.strip()] = other_grade.strip()
                 
-        if 'YTD' not in grades:
-            grades['YTD'] = ''
         return grades
 
         
@@ -216,11 +214,22 @@ class CourseList(BoxLayout):
         
     def grade_converter(self, index, course_name):
         app = Portal.get_running_app()
-        ytd = app.get_grades(course_name)
+        grades = app.get_grades(course_name)
+        
+        ytd = ''
+        mt = ''
+        fin = ''
+        
+        if 'YTD' in grades:
+            ytd = 'YTD: ' + grades['YTD'] + ' '
+        if 'MT' in grades:
+            mt = 'MT: ' + grades['YTD'] + ' '
+        if 'FIN' in grades:
+            fin = 'FIN: ' + grades['YTD']
         
         result = {
             "text": course_name,
-            "grades": 'YTD: ' + ytd
+            "grades": mt + fin + ytd
         }
         
         if index % 2:
@@ -247,7 +256,7 @@ class Portal(App):
         
     def get_grades(self, course_name):
         print course_name
-        return self.pa.get_course_grades(self.pa.active_id, self.pa.course_ids[course_name])['YTD']
+        return self.pa.get_course_grades(self.pa.active_id, self.pa.course_ids[course_name])
         
         
 Portal().run()
