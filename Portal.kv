@@ -1,0 +1,48 @@
+#:import la kivy.adapters.listadapter
+#:import lbl kivy.uix.label
+
+PortalRoot:
+
+<PortalRoot>:
+    AccountDetailsForm:
+ 
+<AccountDetailsForm>:
+    anchor_y: "top"
+    pin_box: pin_input
+    username_box: username_input
+    password_box: password_input
+    BoxLayout:
+        orientation: "vertical"
+        height: "200dp"
+        size_hint_y: None
+        GridLayout:
+            cols: 2
+            row_default_height: "40dp"
+            row_force_default: True
+            spacing: "10dp"
+            padding: "10dp"
+            
+            Label:
+                text: "Username"
+            TextInput:
+                id: username_input
+            Label:
+                text: "Password"
+            TextInput:
+                password: True
+                id: password_input
+            Label:
+                text: "Pin"
+            TextInput:
+                password: True
+                id: pin_input
+        Button:
+            size_hint_y: None
+            height: "40dp"
+            text: "Login"
+            on_press: root.login()
+<CourseList>:
+    list_view: list_view
+    ListView:
+        id: list_view
+        adapter: la.ListAdapter(data=[], cls=lbl.Label)
