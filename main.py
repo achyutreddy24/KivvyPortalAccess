@@ -330,5 +330,4 @@ class Portal(App):
     def get_detailed_grades(self, course_name, mp_num):
         return self.pa.get_detailed_grades(self.pa.active_id, self.pa.course_ids[course_name], mp_num)
         
-        
 Portal().run()
