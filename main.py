@@ -1,3 +1,5 @@
+__version__ = "0.1"
+
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import ObjectProperty
@@ -18,11 +20,11 @@ from BeautifulSoup import BeautifulSoup
 class PortalAccess(object):
 
     def __init__(self):
-        self.home_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Welcome.cfm'
-        self.backpack_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentHome.cfm?STUDENT_RID={id}'
-        self.student_courses_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClasses.cfm?STUDENT_RID={id}'
-        self.course_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClassPage.cfm?STUDENT_RID={id}&COURSE_SECTION_GUID={section_id}'
-        self.grade_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClassGrades.cfm?STUDENT_RID={id}&COURSE_SECTION_GUID={section_id}&MP_CODE={MPNUM}'
+        self.home_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Welcome.cfm'
+        self.backpack_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentHome.cfm?STUDENT_RID={id}'
+        self.student_courses_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClasses.cfm?STUDENT_RID={id}'
+        self.course_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClassPage.cfm?STUDENT_RID={id}&COURSE_SECTION_GUID={section_id}'
+        self.grade_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClassGrades.cfm?STUDENT_RID={id}&COURSE_SECTION_GUID={section_id}&MP_CODE={MPNUM}'
         
         self.cj = CookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
@@ -313,8 +315,12 @@ class Portal(App):
     def portal_login(self, username, password, pin):
         self.pa = PortalAccess()
         self.pa.login(username, password, pin)
-        self.pa.set_active_id(self.pa.student_ids['Achyut Reddy'])
-        self.pa.refresh()
+        
+        if self.pa.student_number is not None:
+            if self.pa.student_number > 1:
+                #TODO select a student screen
+                self.pa.set_active_id(self.pa.student_ids['Achyut Reddy'])
+                self.pa.refresh()
         print self.pa.course_ids
         
     def get_grades(self, course_name):
@@ -322,7 +328,7 @@ class Portal(App):
         return self.pa.get_course_grades(self.pa.active_id, self.pa.course_ids[course_name])
         
     def get_detailed_grades(self, course_name, mp_num):
-        return self.pa.get_detailed_grades(self.pa.student_ids['Achyut Reddy'], self.pa.course_ids[course_name], mp_num)
+        return self.pa.get_detailed_grades(self.pa.active_id, self.pa.course_ids[course_name], mp_num)
         
         
 Portal().run()
