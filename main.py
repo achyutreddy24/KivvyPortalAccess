@@ -1,3 +1,5 @@
+__version__ = "0.1"
+
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import ObjectProperty
@@ -18,11 +20,11 @@ from BeautifulSoup import BeautifulSoup
 class PortalAccess(object):
 
     def __init__(self):
-        self.home_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Welcome.cfm'
-        self.backpack_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentHome.cfm?STUDENT_RID={id}'
-        self.student_courses_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClasses.cfm?STUDENT_RID={id}'
-        self.course_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClassPage.cfm?STUDENT_RID={id}&COURSE_SECTION_GUID={section_id}'
-        self.grade_url = 'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClassGrades.cfm?STUDENT_RID={id}&COURSE_SECTION_GUID={section_id}&MP_CODE={MPNUM}'
+        self.home_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Welcome.cfm'
+        self.backpack_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentHome.cfm?STUDENT_RID={id}'
+        self.student_courses_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClasses.cfm?STUDENT_RID={id}'
+        self.course_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClassPage.cfm?STUDENT_RID={id}&COURSE_SECTION_GUID={section_id}'
+        self.grade_url = r'https://pamet-sapphire.k12system.com/CommunityWebPortal/Backpack/StudentClassGrades.cfm?STUDENT_RID={id}&COURSE_SECTION_GUID={section_id}&MP_CODE={MPNUM}'
         
         self.cj = CookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
