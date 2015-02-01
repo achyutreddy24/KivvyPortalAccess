@@ -139,11 +139,11 @@ class PortalAccess(object):
             tds = trs[tr].findAll('td')
 
             info = dict()
-            info['name'] = tds[0].contents[-1]
-            info['score'] = tds[1].contents[-1]
-            info['total_score'] = tds[2].contents[-1]
-            info['date'] = tds[3].contents[-1]
-            info['category'] = tds[4].contents[-1]
+            info['name'] = str(tds[0].contents[-1]).strip().replace(r'&nbsp;/&nbsp;', '').replace(r'&amp;', '&')
+            info['score'] = str(tds[1].contents[-1]).strip().replace(r'&nbsp;/&nbsp;', '').replace(r'&amp;', '&')
+            info['total_score'] = str(tds[2].contents[-1]).strip().replace(r'&nbsp;/&nbsp;', '').replace(r'&amp;', '&')
+            info['date'] = str(tds[3].contents[-1]).strip().replace(r'&nbsp;/&nbsp;', '').replace(r'&amp;', '&')
+            info['category'] = str(tds[4].contents[-1]).strip().replace(r'&nbsp;/&nbsp;', '').replace(r'&amp;', '&')
             
             assignments.append(info)
         return assignments
@@ -246,6 +246,29 @@ class CourseList(BoxLayout):
      
         return result
         
+class GradeListItem(BoxLayout):
+    date = StringProperty()
+    name = StringProperty()
+    score = StringProperty()
+    total_score = StringProperty()
+    category = StringProperty()
+        
+class GradeList(BoxLayout):
+    list_view = ObjectProperty()
+ 
+    def __init__(self, course_name, mp_num):
+        super(GradeList, self).__init__()
+        app = Portal.get_running_app()
+        self.grades = app.get_detailed_grades(course_name, mp_num)
+        self.list_view.adapter.data = range(len(self.grades))
+        
+    def grade_list_converter(self, index, item_num):
+        app = Portal.get_running_app()
+        
+        result = self.grades[item_num]
+             
+        return result
+        
 class PortalRoot(BoxLayout):
     def show_course_list(self):
         self.clear_widgets()
@@ -279,6 +302,12 @@ class PortalRoot(BoxLayout):
                                      MP4=MP4)
         self.add_widget(grade_window)
 
+    def show_detailed_grades(self, course_name, mp_num):
+        self.clear_widgets()
+        self.grade_list = GradeList(course_name, mp_num)
+        self.add_widget(self.grade_list)
+    
+        
 class Portal(App):
         
     def portal_login(self, username, password, pin):
@@ -291,6 +320,9 @@ class Portal(App):
     def get_grades(self, course_name):
         print course_name
         return self.pa.get_course_grades(self.pa.active_id, self.pa.course_ids[course_name])
+        
+    def get_detailed_grades(self, course_name, mp_num):
+        return self.pa.get_detailed_grades(self.pa.student_ids['Achyut Reddy'], self.pa.course_ids[course_name], mp_num)
         
         
 Portal().run()

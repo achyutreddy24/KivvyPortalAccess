@@ -75,31 +75,61 @@ PortalRoot:
         size_hint_y: None
         height: "40dp"
     BoxLayout:
-        size_hint_y: None
-        height: "50dp"
         orientation: 'vertical'
-        Label:
+        Button:
             text: 'MP1: ' + root.MP1
             size_hint_y: None
             font_size: "25dp"
-            height: "25dp" 
-        Label:
+            height: "25dp"
+            on_press: app.root.show_detailed_grades(root.course_name, 1) 
+        Button:
             text: 'MP2: ' + root.MP2
             size_hint_y: None
             font_size: "25dp"
-            height: "25dp" 
-        Label:
+            height: "25dp"
+            on_press: app.root.show_detailed_grades(root.course_name, 2) 
+        Button:
             text: 'MP3: ' + root.MP3
             size_hint_y: None
             font_size: "25dp"
             height: "25dp" 
-        Label:
+            on_press: app.root.show_detailed_grades(root.course_name, 3)
+        Button:
             text: 'MP4: ' + root.MP4
             size_hint_y: None
             font_size: "25dp"
             height: "25dp"
-    Button:
-        size_hint_x: None
-        width: "70dp"
-        text: "Back"
-        on_release: app.root.show_course_list()
+            on_press: app.root.show_detailed_grades(root.course_name, 4)
+
+
+<GradeListItem>:
+    size_hint_y: None
+    BoxLayout:
+        size_hint_x: 3
+        orientation: 'vertical'
+        Label:
+            text: root.name
+            font_size: "25dp"
+            size_hint_y: 0.7
+        Label:
+            text: root.date
+            color: (0.5, 0.5, 0.5, 1.0)
+            font_size: "15dp"
+            size_hint_y: 0.3
+        Label:
+            text: root.score + '/' + root.total_score
+            color: (0.5, 0.5, 0.5, 1.0)
+            font_size: "15dp"
+            size_hint_y: 0.3
+        Label:
+            text: root.category
+            color: (0.5, 0.5, 0.5, 1.0)
+            font_size: "15dp"
+            size_hint_y: 0.3
+
+
+<GradeList>:
+    list_view: list_view
+    ListView:
+        id: list_view
+        adapter: la.ListAdapter(data=[], cls=ok.GradeListItem, args_converter=root.grade_list_converter)
