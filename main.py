@@ -9,7 +9,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.properties import StringProperty
 from kivy.uix.listview import ListItemButton
-from kivy.utils import platform
 
 
 import urllib2
@@ -17,10 +16,6 @@ import urllib
 import re
 from cookielib import CookieJar
 from BeautifulSoup import BeautifulSoup
-
-platform = platform()
-if platform == 'android':
-    import gs_android
 
 class PortalAccess(object):
 
@@ -334,14 +329,5 @@ class Portal(App):
         
     def get_detailed_grades(self, course_name, mp_num):
         return self.pa.get_detailed_grades(self.pa.active_id, self.pa.course_ids[course_name], mp_num)
-        
-    def on_pause(self):
-        if platform == 'android':
-            gs_android.on_stop()
-        return True
-
-    def on_resume(self):
-        if platform == 'android':
-            gs_android.on_start()
         
 Portal().run()
